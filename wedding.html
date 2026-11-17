@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Свадебный планировщик 💍</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0a0c;--gold:#e6c47a;--gold2:#f5dda0;--gold3:#b8924a;
+  --rose:#e0a8b8;--rose2:#f0c8d4;--text:#f7ecdf;--muted:#b09a82;
+  --card:rgba(38,26,32,.72);--bord:rgba(230,196,122,.28);
+}
+body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;line-height:1.6;overflow-x:hidden;position:relative}
+.aura{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aura b{position:absolute;border-radius:50%;filter:blur(100px);animation:drift 25s ease-in-out infinite}
+.aura b:nth-child(1){width:600px;height:600px;background:radial-gradient(circle,rgba(230,196,122,.5),transparent 70%);top:-150px;left:-150px;opacity:.4}
+.aura b:nth-child(2){width:700px;height:700px;background:radial-gradient(circle,rgba(224,168,184,.4),transparent 70%);top:20%;right:-250px;animation-delay:-8s;opacity:.35}
+.aura b:nth-child(3){width:550px;height:550px;background:radial-gradient(circle,rgba(184,146,74,.45),transparent 70%);bottom:-150px;left:30%;animation-delay:-16s;opacity:.4}
+.aura b:nth-child(4){width:450px;height:450px;background:radial-gradient(circle,rgba(245,221,160,.3),transparent 70%);top:55%;left:45%;animation-delay:-4s;opacity:.3}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(80px,-60px) scale(1.15)}66%{transform:translate(-60px,60px) scale(.9)}}
+.wrap{position:relative;z-index:1;max-width:1150px;margin:0 auto;padding:0 20px 60px}
+header{text-align:center;padding:70px 20px 50px}
+.ornament{font-size:28px;color:var(--gold2);letter-spacing:16px;margin-bottom:18px;text-shadow:0 0 40px rgba(230,196,122,.9),0 0 80px rgba(230,196,122,.5);animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:.7}50%{opacity:1}}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,7vw,74px);font-weight:600;letter-spacing:3px;line-height:1.05;margin-bottom:18px;background:linear-gradient(120deg,var(--gold2) 0%,var(--gold) 30%,var(--rose2) 50%,var(--gold) 70%,var(--gold2) 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 7s linear infinite;filter:drop-shadow(0 0 30px rgba(230,196,122,.4))}
+@keyframes shine{to{background-position:200% center}}
+.subtitle{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--gold);letter-spacing:.5px}
+.divider{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:32px;color:var(--gold2);font-size:20px}
+.divider::before,.divider::after{content:'';width:100px;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.card{background:var(--card);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:26px;padding:36px;margin-bottom:28px;border:1px solid var(--bord);box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 80px rgba(230,196,122,.08),inset 0 1px 0 rgba(245,221,160,.12);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),var(--gold),var(--rose2),var(--gold),var(--gold2),transparent);opacity:.85}
+.card::after{content:'❦';position:absolute;top:-10px;right:20px;font-size:44px;color:var(--gold);opacity:.18;transform:rotate(15deg);pointer-events:none}
+h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;margin-bottom:26px;display:flex;align-items:center;gap:14px;color:var(--gold2);text-shadow:0 0 30px rgba(230,196,122,.35)}
+h2 .icon{font-size:28px;filter:drop-shadow(0 0 12px rgba(230,196,122,.6))}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+input,select{width:100%;padding:15px 18px;border-radius:14px;border:1.5px solid rgba(230,196,122,.28);font-size:14px;font-family:'Montserrat',sans-serif;background:rgba(15,10,12,.6);color:var(--text);transition:all .3s}
+input::placeholder{color:#6e5a63}
+input:focus,select:focus{outline:none;border-color:var(--gold2);box-shadow:0 0 0 4px rgba(230,196,122,.18),0 0 30px rgba(230,196,122,.3);background:rgba(25,16,20,.8)}
+select{cursor:pointer}
+select option,select optgroup{background:#1f1418;color:var(--text)}
+select optgroup{font-weight:600;color:var(--gold2)}
+button{padding:15px 28px;border-radius:14px;border:none;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .3s;letter-spacing:.5px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-gold{background:linear-gradient(135deg,var(--gold2) 0%,var(--gold) 50%,var(--gold3) 100%);color:#1a1014;box-shadow:0 8px 28px rgba(230,196,122,.45),inset 0 1px 0 rgba(255,255,255,.35);width:100%;border:1px solid rgba(245,221,160,.4)}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(230,196,122,.65),inset 0 1px 0 rgba(255,255,255,.5);background:linear-gradient(135deg,#f9e4b0 0%,#f0d68c 50%,#c9a05a 100%)}
+.btn-link{background:linear-gradient(135deg,var(--gold) 0%,var(--gold3) 100%);color:#1a1014;padding:12px 22px;font-size:13px;box-shadow:0 6px 20px rgba(230,196,122,.35);border:1px solid rgba(245,221,160,.35)}
+.btn-link:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(230,196,122,.55)}
+.btn-del{background:transparent;color:var(--rose);border:1.5px solid rgba(224,168,184,.35);padding:6px 11px;font-size:13px;border-radius:10px;font-weight:600}
+.btn-del:hover{background:rgba(224,168,184,.18)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:26px}
+.stat{background:linear-gradient(160deg,rgba(230,196,122,.14) 0%,rgba(224,168,184,.06) 100%);border-radius:18px;padding:20px 12px;text-align:center;border:1px solid rgba(230,196,122,.25);transition:transform .3s,box-shadow .3s}
+.stat:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(230,196,122,.25)}
+.stat .num{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;background:linear-gradient(135deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:6px;filter:drop-shadow(0 0 12px rgba(230,196,122,.5))}
+.stat .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;font-weight:500}
+.tw{overflow-x:auto;border-radius:16px}
+table{width:100%;border-collapse:collapse}
+th{background:rgba(15,10,12,.6);color:var(--gold2);padding:15px 12px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;border-bottom:1px solid var(--bord)}
+td{padding:15px 12px;border-bottom:1px solid rgba(230,196,122,.08);font-size:14px}
+tr:hover td{background:rgba(230,196,122,.06)}
+.side-tag{font-size:11px;padding:5px 13px;border-radius:20px;font-weight:500;display:inline-block}
+.side-bride{background:rgba(224,168,184,.22);color:var(--rose2)}
+.side-groom{background:rgba(150,190,230,.18);color:#b8d8f0}
+.grp-builder{background:linear-gradient(160deg,rgba(230,196,122,.1) 0%,rgba(224,168,184,.05) 100%);border-radius:18px;padding:24px;margin-bottom:18px;border:1.5px dashed rgba(230,196,122,.4)}
+.grp-builder h3{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold2);margin-bottom:10px;font-weight:600}
+.grp-hint{font-size:12px;color:var(--muted);margin-bottom:14px}
+.grp-selector{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:14px;background:rgba(15,10,12,.4);border-radius:14px;max-height:220px;overflow-y:auto}
+.guest-opt{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:20px;border:1.5px solid rgba(230,196,122,.3);cursor:pointer;font-size:13px;transition:all .25s;user-select:none;background:rgba(15,10,12,.5)}
+.guest-opt:hover{border-color:var(--gold2);background:rgba(230,196,122,.1)}
+.guest-opt.selected{background:linear-gradient(135deg,rgba(230,196,122,.3) 0%,rgba(224,168,184,.2) 100%);border-color:var(--gold2);color:var(--gold2);font-weight:600;box-shadow:0 0 16px rgba(230,196,122,.35)}
+.guest-opt input{display:none}
+.grp-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.grp-name-input{flex:1;min-width:200px}
+.grp-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.grp-chip{background:linear-gradient(135deg,rgba(230,196,122,.2) 0%,rgba(224,168,184,.12) 100%);border:1.5px solid rgba(230,196,122,.5);border-radius:22px;padding:10px 18px;font-size:13px;color:var(--gold2);font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.grp-chip .icon{font-size:15px}
+.grp-chip .x{color:var(--rose);margin-left:8px;cursor:pointer;font-weight:700;font-size:14px;padding:2px 6px;border-radius:50%;transition:all .2s}
+.grp-chip .x:hover{background:rgba(224,168,184,.3)}
+.hall{background:linear-gradient(160deg,rgba(15,10,12,.7) 0%,rgba(38,26,32,.55) 100%);border-radius:22px;padding:45px 20px;border:2px dashed rgba(230,196,122,.35);position:relative;min-height:400px;overflow:hidden}
+.hall::before{content:'❀ ✿ ❀';position:absolute;top:16px;left:20px;font-size:24px;color:var(--gold);opacity:.4;letter-spacing:8px}
+.hall::after{content:'✿ ❀ ✿';position:absolute;top:16px;right:20px;font-size:24px;color:var(--gold);opacity:.4;letter-spacing:8px}
+.stage{background:linear-gradient(135deg,rgba(230,196,122,.3) 0%,rgba(184,146,74,.18) 100%);border:2px solid var(--gold2);border-radius:18px;padding:18px;text-align:center;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--gold2);letter-spacing:5px;margin-bottom:60px;box-shadow:0 0 50px rgba(230,196,122,.35),inset 0 0 30px rgba(230,196,122,.15)}
+.hall-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:60px 30px;max-width:900px;margin:0 auto}
+.rtable{position:relative;aspect-ratio:1;max-width:170px;margin:0 auto;width:100%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3a2a2e,#261a20 70%);border:2.5px solid var(--gold2);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 40px rgba(230,196,122,.3);transition:transform .3s,box-shadow .3s}
+.rtable:hover{transform:scale(1.08);box-shadow:0 15px 45px rgba(0,0,0,.6),0 0 65px rgba(230,196,122,.55)}
+.rtable .num{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--gold2);line-height:1;text-shadow:0 0 22px rgba(230,196,122,.6)}
+.rtable .seats{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:5px;font-weight:500}
+.rtable .list{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);background:#2a1e24;border-radius:12px;padding:10px 16px;font-size:11px;color:var(--text);box-shadow:0 10px 30px rgba(0,0,0,.7);border:1px solid rgba(230,196,122,.4);max-width:260px;text-align:center;line-height:1.5;z-index:2;opacity:0;pointer-events:none;transition:opacity .3s}
+.rtable:hover .list{opacity:1}
+.couple-wrap{grid-column:1/-1;display:flex;justify-content:center;margin-top:20px}
+.couple{background:linear-gradient(135deg,rgba(230,196,122,.35) 0%,rgba(184,146,74,.22) 100%);border:2.5px solid var(--gold2);border-radius:26px;padding:26px 55px;text-align:center;box-shadow:0 15px 45px rgba(0,0,0,.5),0 0 60px rgba(230,196,122,.45)}
+.couple .names{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--gold2);letter-spacing:1px;text-shadow:0 0 22px rgba(230,196,122,.6)}
+.couple .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2.5px;margin-bottom:6px}
+.empty{text-align:center;padding:70px 20px;color:var(--muted);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:19px}
+.empty .big{font-size:60px;display:block;margin-bottom:16px;opacity:.5}
+.tbox{background:linear-gradient(160deg,rgba(230,196,122,.1) 0%,rgba(224,168,184,.05) 100%);border-radius:20px;padding:24px;margin-bottom:18px;border:1px solid rgba(230,196,122,.28)}
+.tbox h3{font-family:'Cormorant Garamond',serif;font-size:23px;color:var(--gold2);margin-bottom:16px;font-weight:600;display:flex;align-items:center;gap:10px}
+.tbox h3 .cnt{font-family:'Montserrat',sans-serif;font-size:11px;background:var(--gold);color:#1a1014;padding:4px 13px;border-radius:12px;font-weight:700}
+.tbox.couple-box{background:linear-gradient(135deg,rgba(230,196,122,.2) 0%,rgba(184,146,74,.1) 100%);border:2px solid var(--gold2)}
+.tbox.couple-box h3{color:var(--gold2)}
+.chip{display:inline-block;background:rgba(15,10,12,.5);padding:9px 17px;border-radius:26px;margin:4px;font-size:13px;font-weight:500;border:1px solid rgba(230,196,122,.3);transition:transform .2s}
+.chip:hover{transform:translateY(-2px)}
+.chip .r{font-size:11px;color:var(--muted);display:block;font-weight:400;margin-top:2px}
+.chip .p{font-size:11px;color:var(--gold2);display:block;font-weight:500;margin-top:2px}
+.res-sec{margin-bottom:22px}
+.res-sec .ttl{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold2);font-weight:600;margin-bottom:14px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(230,196,122,.18) 0%,rgba(224,168,184,.1) 100%);padding:11px 19px;border-radius:15px;margin:5px 5px 5px 0;font-size:14px;border:1px solid rgba(230,196,122,.3);font-weight:500}
+.badge.soft{background:linear-gradient(135deg,rgba(120,180,150,.18) 0%,rgba(100,160,130,.1) 100%);border-color:rgba(120,180,150,.35)}
+.badge b{color:var(--gold2)}
+.hint{font-size:12px;color:var(--muted);margin-top:16px;line-height:1.7;padding:16px;background:rgba(15,10,12,.45);border-radius:14px;border-left:3px solid var(--gold2)}
+@media(max-width:700px){.hall-grid{grid-template-columns:repeat(2,1fr);gap:45px 20px}.couple{padding:22px 40px}}
+@media(max-width:600px){.card{padding:24px 18px}h1{font-size:38px}header{padding:45px 10px 25px}.rtable .list{opacity:1;position:static;transform:none;margin-top:12px;background:transparent;box-shadow:none;border:none;padding:0}}
+</style>
+</head>
+<body>
+
+<div class="aura"><b></b><b></b><b></b><b></b></div>
+
+<div class="wrap">
+  <header>
+    <div class="ornament">❀ ✿ ❀ ✿ ❀</div>
+    <h1>Свадебный планировщик</h1>
+    <div class="subtitle">рассадка · семьи · пары · напитки</div>
+    <div class="divider">❦</div>
+  </header>
+
+  <!-- ДОБАВИТЬ ГОСТЯ -->
+  <div class="card">
+    <h2><span class="icon">👥</span> Добавить гостя</h2>
+    <div class="grid">
+      <input id="gName" placeholder="Имя гостя">
+      <select id="gRole">
+        <option value="">— Кем является —</option>
+        <optgroup label="👨‍👩‍👧 Ближайшие">
+          <option>Мама</option><option>Папа</option><option>Отчим</option><option>Мачеха</option>
+          <option>Бабушка</option><option>Дедушка</option><option>Прабабушка</option><option>Прадедушка</option>
+        </optgroup>
+        <optgroup label="👫 Братья и сёстры">
+          <option>Брат</option><option>Сестра</option><option>Старший брат</option><option>Младший брат</option>
+          <option>Старшая сестра</option><option>Младшая сестра</option><option>Сводный брат</option><option>Сводная сестра</option>
+        </optgroup>
+        <optgroup label="👨‍👩‍👦 Дяди и тёти">
+          <option>Дядя (по маме)</option><option>Дядя (по папе)</option><option>Тётя (по маме)</option><option>Тётя (по папе)</option>
+          <option>Дядя</option><option>Тётя</option>
+        </optgroup>
+        <optgroup label="🧒 Двоюродные и троюродные">
+          <option>Двоюродный брат</option><option>Двоюродная сестра</option><option>Троюродный брат</option><option>Троюродная сестра</option>
+          <option>Двоюродный дядя</option><option>Двоюродная тётя</option><option>Двоюродная сестра мамы</option>
+          <option>Двоюродный брат мамы</option><option>Двоюродная сестра папы</option><option>Двоюродный брат папы</option>
+          <option>Двоюродная бабушка</option><option>Двоюродный дедушка</option>
+        </optgroup>
+        <optgroup label="👶 Племянники и внуки">
+          <option>Племянник</option><option>Племянница</option><option>Внук</option><option>Внучка</option>
+          <option>Двоюродный племянник</option><option>Двоюродная племянница</option>
+        </optgroup>
+        <optgroup label="💍 Сваты и родня">
+          <option>Сват</option><option>Сватья</option><option>Кум</option><option>Кума</option>
+          <option>Свекровь</option><option>Свёкор</option><option>Тёща</option><option>Тесть</option>
+          <option>Зять</option><option>Сноха (невестка)</option>
+          <option>Свояк</option><option>Свояченица</option><option>Шурин</option><option>Деверь</option><option>Золовка</option>
+        </optgroup>
+        <optgroup label="💑 Половинка">
+          <option>Муж</option><option>Жена</option><option>Парень (бойфренд)</option><option>Девушка (герлфренд)</option>
+        </optgroup>
+        <optgroup label="👶 Дети">
+          <option>Ребёнок</option><option>Сын</option><option>Дочь</option>
+        </optgroup>
+        <optgroup label="👥 Друзья">
+          <option>Друг</option><option>Лучший друг</option><option>Подруга</option><option>Лучшая подруга</option>
+          <option>Свидетель</option><option>Свидетельница</option><option>Друг семьи</option>
+          <option>Сосед</option><option>Соседка</option><option>Коллега</option><option>Начальник</option>
+          <option>Одноклассник</option><option>Одноклассница</option><option>Одногруппник</option><option>Одногруппница</option>
+        </optgroup>
+        <optgroup label="✨ Другое">
+          <option>Гость</option><option>Другое</option>
+        </optgroup>
+      </select>
+      <select id="gSide">
+        <option value="bride">Сторона невесты</option>
+        <option value="groom">Сторона жениха</option>
+      </select>
+      <select id="gDrink">
+        <option value="all">🍷 Всё (любой алкоголь)</option>
+        <option value="unknown">🤷 Не знаю</option>
+        <option value="vodka">Крепкое</option>
+        <option value="wine">Вино</option>
+        <option value="champagne">Шампанское</option>
+        <option value="none">Не пьёт</option>
+      </select>
+      <select id="gSoft">
+        <option value="all">🥤 Всё (любой безалк.)</option>
+        <option value="unknown">🤷 Не знаю</option>
+        <option value="water">Вода</option>
+        <option value="juice">Сок</option>
+        <option value="soda">Газировка</option>
+        <option value="tea">Чай/кофе</option>
+        <option value="mors">Морс</option>
+        <option value="lemonade">Лимонад</option>
+        <option value="compote">Компот</option>
+      </select>
+      <select id="gCompany">
+        <option value="alone">👤 Придёт один</option>
+        <option value="pair">💑 С парой</option>
+        <option value="family">👨‍👩‍👧 Семьёй</option>
+        <option value="children">👶 С детьми</option>
+      </select>
+    </div>
+    <button type="button" id="btnAdd" class="btn-gold">➕ Добавить гостя</button>
+    <div class="hint">Можно нажать <b>Enter</b> в поле имени. Для безалкогольных есть опция «Всё».</div>
+  </div>
+
+  <!-- ПОСАДИТЬ ВМЕСТЕ — СЕМЬИ И ПАРЫ -->
+  <div class="card">
+    <h2><span class="icon">🤝</span> Посадить вместе (пары и семьи)</h2>
+    <div class="grp-builder">
+      <h3>Создать группу «сидят вместе»</h3>
+      <div class="grp-hint">Отметьте галочками <b>всех</b>, кто должен сидеть за одним столом. Например: Соня + Дима + их ребёнок. Или семья Ивановых из 4 человек. Можно объединять сколько угодно гостей.</div>
+
+      <div class="grp-selector" id="guestSelector">
+        <div class="grp-hint">Сначала добавьте гостей выше</div>
+      </div>
+
+      <div class="grp-actions">
+        <input type="text" id="groupName" class="grp-name-input" placeholder="Название группы (например: Семья Ивановых)">
+        <button type="button" id="btnCreateGroup" class="btn-link">💍 Создать группу</button>
+      </div>
+
+      <div class="grp-list" id="groupsList"></div>
+    </div>
+    <div class="hint">Группы могут быть любого размера. Если группа большая (например 5 человек) — она сядет за стол, где есть место. Несколько маленьких групп могут объединиться за одним столом.</div>
+  </div>
+
+  <!-- СПИСОК ГОСТЕЙ -->
+  <div class="card">
+    <h2><span class="icon">📋</span> Список гостей</h2>
+    <div class="stats" id="stats"></div>
+    <div class="tw">
+      <table id="guestTable">
+        <thead>
+          <tr><th>Имя</th><th>Кем</th><th>Сторона</th><th>Алкоголь</th><th>Безалк.</th><th>Группа</th><th></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <button type="button" id="btnSeat" class="btn-gold" style="margin-top:20px">🎯 Распределить по 5 столам</button>
+  </div>
+
+  <!-- ПЛАН -->
+  <div class="card">
+    <h2><span class="icon">🏛️</span> План зала</h2>
+    <div class="hall" id="hall">
+      <div class="empty"><span class="big">🏛️</span>Добавьте гостей и нажмите «Распределить»</div>
+    </div>
+  </div>
+
+  <!-- РАССАДКА -->
+  <div class="card">
+    <h2><span class="icon">🪑</span> Рассадка по столам</h2>
+    <div id="tablesResult"><div class="empty"><span class="big">🪑</span>Пока нет рассадки</div></div>
+  </div>
+
+  <!-- НАПИТКИ -->
+  <div class="card">
+    <h2><span class="icon">🍾</span> Расчёт напитков</h2>
+    <button type="button" id="btnCalc" class="btn-gold">🍷 Рассчитать напитки</button>
+    <div id="alcoholResult" style="margin-top:20px"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var guests = [];
+  var groups = [];   // [{ name: "Семья Ивановых", members: ["Иван","Мария"] }]
+  var selectedForGroup = {};  // name -> true
+
+  var drinkNames = {
+    all: "Всё", unknown: "Не знаю", vodka: "Крепкое",
+    wine: "Вино", champagne: "Шампанское", none: "Не пьёт"
+  };
+  var softNames = {
+    all: "Всё", unknown: "Не знаю", water: "Вода", juice: "Сок",
+    soda: "Газировка", tea: "Чай/кофе", mors: "Морс",
+    lemonade: "Лимонад", compote: "Компот"
+  };
+  var sideNames = { bride: "Невесты", groom: "Жениха" };
+  var companyNames = { alone: "Один", pair: "С парой", family: "Семьёй", children: "С детьми" };
+
+  function $(id) { return document.getElementById(id); }
+
+  function addGuest() {
+    var name = $("gName").value.trim();
+    if (!name) {
+      $("gName").style.borderColor = "#e0a8b8";
+      $("gName").focus();
+      setTimeout(function() { $("gName").style.borderColor = ""; }, 900);
+      return;
+    }
+
+    guests.push({
+      name: name,
+      role: $("gRole").value || "Гость",
+      side: $("gSide").value,
+      drink: $("gDrink").value,
+      soft: $("gSoft").value,
+      company: $("gCompany").value
+    });
+
+    $("gName").value = "";
+    $("gName").focus();
+    refreshAll();
+  }
+
+  function removeGuest(i) {
+    var name = guests[i].name;
+    guests.splice(i, 1);
+    // убираем из групп
+    for (var gi = groups.length - 1; gi >= 0; gi--) {
+      groups[gi].members = groups[gi].members.filter(function(m) { return m !== name; });
+      if (groups[gi].members.length < 2) groups.splice(gi, 1);
+    }
+    delete selectedForGroup[name];
+    refreshAll();
+  }
+
+  function toggleSelect(name) {
+    if (selectedForGroup[name]) delete selectedForGroup[name];
+    else selectedForGroup[name] = true;
+    renderGuestSelector();
+  }
+
+  function createGroup() {
+    var members = [];
+    for (var k in selectedForGroup) members.push(k);
+
+    if (members.length < 2) {
+      alert("Выберите хотя бы 2 гостей для группы");
+      return;
+    }
+
+    // Проверяем, не входит ли кто-то уже в другую группу
+    for (var gi = 0; gi < groups.length; gi++) {
+      for (var m = 0; m < members.length; m++) {
+        if (groups[gi].members.indexOf(members[m]) !== -1) {
+          alert("Гость «" + members[m] + "» уже в группе «" + groups[gi].name + "». Сначала удалите его оттуда.");
+          return;
+        }
+      }
+    }
+
+    var groupName = $("groupName").value.trim();
+    if (!groupName) {
+      groupName = members.join(" + ");
+    }
+
+    groups.push({ name: groupName, members: members });
+    selectedForGroup = {};
+    $("groupName").value = "";
+    refreshAll();
+  }
+
+  function removeGroup(i) {
+    groups.splice(i, 1);
+    refreshAll();
+  }
+
+  function getGroupForGuest(name) {
+    for (var i = 0; i < groups.length; i++) {
+      if (groups[i].members.indexOf(name) !== -1) return groups[i];
+    }
+    return null;
+  }
+
+  function refreshAll() {
+    renderGuestSelector();
+    renderGuests();
+    renderGroups();
+    renderStats();
+  }
+
+  function renderGuestSelector() {
+    var div = $("guestSelector");
+    if (!div) return;
+    if (guests.length === 0) {
+      div.innerHTML = '<div class="grp-hint">Сначала добавьте гостей выше</div>';
+      return;
+    }
+    var html = "";
+    for (var i = 0; i < guests.length; i++) {
+      var g = guests[i];
+      var inGroup = getGroupForGuest(g.name);
+      var selected = selectedForGroup[g.name] ? " selected" : "";
+      var disabled = inGroup ? ' style="opacity:.5;cursor:not-allowed"' : "";
+      var checkMark = selected ? "✓ " : "";
+      html += '<div class="guest-opt' + selected + '" data-name="' + esc(g.name) + '"' + disabled + '>' +
+        checkMark + esc(g.name) +
+        (inGroup ? ' <span style="font-size:10px;color:#b09a82">(' + esc(inGroup.name) + ')</span>' : '') +
+        '</div>';
+    }
+    div.innerHTML = html;
+
+    var opts = div.querySelectorAll(".guest-opt");
+    for (var j = 0; j < opts.length; j++) {
+      opts[j].addEventListener("click", function() {
+        var nm = this.getAttribute("data-name");
+        if (getGroupForGuest(nm)) return; // уже в группе
+        toggleSelect(nm);
+      });
+    }
+  }
+
+  function renderGuests() {
+    var tbody = document.querySelector("#guestTable tbody");
+    if (!tbody) return;
+    var html = "";
+    if (guests.length === 0) {
+      html = '<tr><td colspan="7" style="text-align:center;color:#b09a82;font-style:italic;padding:30px">Пока нет гостей — добавьте первого!</td></tr>';
+    } else {
+      for (var i = 0; i < guests.length; i++) {
+        var g = guests[i];
+        var grp = getGroupForGuest(g.name);
+        var grpHtml = grp
+          ? '<span style="color:#f5dda0;font-size:12px">💍 ' + esc(grp.name) + '</span>'
+          : '<span style="color:#b09a82;font-size:12px">' + companyNames[g.company] + '</span>';
+
+        html += "<tr>" +
+          "<td><b>" + esc(g.name) + "</b></td>" +
+          "<td>" + esc(g.role) + "</td>" +
+          '<td><span class="side-tag side-' + g.side + '">' + sideNames[g.side] + "</span></td>" +
+          "<td>" + drinkNames[g.drink] + "</td>" +
+          "<td>" + softNames[g.soft] + "</td>" +
+          "<td>" + grpHtml + "</td>" +
+          '<td><button type="button" class="btn-del" data-del="' + i + '">✖</button></td>' +
+          "</tr>";
+      }
+    }
+    tbody.innerHTML = html;
+
+    var dels = tbody.querySelectorAll("[data-del]");
+    for (var j = 0; j < dels.length; j++) {
+      dels[j].addEventListener("click", function() {
+        removeGuest(parseInt(this.getAttribute("data-del")));
+      });
+    }
+  }
+
+  function renderGroups() {
+    var div = $("groupsList");
+    if (!div) return;
+    if (groups.length === 0) {
+      div.innerHTML = '<div class="grp-hint">Пока нет групп</div>';
+      return;
+    }
+    var html = "";
+    for (var i = 0; i < groups.length; i++) {
+      var g = groups[i];
+      html += '<span class="grp-chip">' +
+        '<span class="icon">' + (g.members.length > 2 ? "👨‍👩‍👧" : "💑") + '</span> ' +
+        esc(g.name) +
+        ' <span style="font-size:11px;opacity:.8">(' + g.members.length + ')</span>' +
+        ' <span class="x" data-group="' + i + '">✖</span>' +
+        '</span>';
+    }
+    div.innerHTML = html;
+    var xs = div.querySelectorAll("[data-group]");
+    for (var j = 0; j < xs.length; j++) {
+      xs[j].addEventListener("click", function() {
+        removeGroup(parseInt(this.getAttribute("data-group")));
+      });
+    }
+  }
+
+  function renderStats() {
+    var div = $("stats");
+    if (!div) return;
+    if (guests.length === 0) { div.innerHTML = ""; return; }
+    var bride = 0, groom = 0, drink = 0, nodrink = 0, unknown = 0;
+    for (var i = 0; i < guests.length; i++) {
+      var g = guests[i];
+      if (g.side === "bride") bride++; else groom++;
+      if (g.drink === "none") nodrink++;
+      else if (g.drink === "unknown") unknown++;
+      else drink++;
+    }
+    div.innerHTML =
+      '<div class="stat"><div class="num">' + guests.length + '</div><div class="lbl">Всего</div></div>' +
+      '<div class="stat"><div class="num">' + bride + '</div><div class="lbl">Невесты</div></div>' +
+      '<div class="stat"><div class="num">' + groom + '</div><div class="lbl">Жениха</div></div>' +
+      '<div class="stat"><div class="num">' + drink + '</div><div class="lbl">Пьют</div></div>' +
+      '<div class="stat"><div class="num">' + nodrink + '</div><div class="lbl">Не пьют</div></div>' +
+      '<div class="stat"><div class="num">' + unknown + '</div><div class="lbl">Не знаю</div></div>';
+  }
+
+  /* Собираем единицы рассадки: группы + одиночные гости */
+  function getSeatingUnits() {
+    var units = [];
+    var inGroup = {};
+
+    for (var i = 0; i < groups.length; i++) {
+      var grp = groups[i];
+      var members = [];
+      for (var k = 0; k < grp.members.length; k++) {
+        var guest = findGuest(grp.members[k]);
+        if (guest) {
+          members.push(guest);
+          inGroup[grp.members[k]] = true;
+        }
+      }
+      if (members.length > 0) {
+        units.push({ name: grp.name, guests: members, isGroup: true });
+      }
+    }
+
+    for (var i = 0; i < guests.length; i++) {
+      if (!inGroup[guests[i].name]) {
+        units.push({ name: guests[i].name, guests: [guests[i]], isGroup: false });
+      }
+    }
+
+    return units;
+  }
+
+  function findGuest(name) {
+    for (var i = 0; i < guests.length; i++) if (guests[i].name === name) return guests[i];
+    return null;
+  }
+
+  function autoSeat() {
+    if (guests.length === 0) { alert("Сначала добавьте гостей"); return; }
+
+    var units = getSeatingUnits();
+    // сначала большие группы
+    units.sort(function(a, b) { return b.guests.length - a.guests.length; });
+
+    var tables = [[], [], [], [], []];
+    var sizes = [0, 0, 0, 0, 0];
+
+    for (var i = 0; i < units.length; i++) {
+      var u = units[i];
+      var best = 0, bestScore = -9999;
+      for (var t = 0; t < 5; t++) {
+        if (sizes[t] + u.guests.length > 12) continue;
+        var score = 0;
+        // бонус за ту же сторону
+        for (var k = 0; k < tables[t].length; k++)
+          for (var m = 0; m < u.guests.length; m++)
+            if (tables[t][k].side === u.guests[m].side) score += 1;
+        // предпочитаем менее заполненный
+        score -= sizes[t] * 0.5;
+        if (score > bestScore) { bestScore = score; best = t; }
+      }
+      for (var j = 0; j < u.guests.length; j++) tables[best].push(u.guests[j]);
+      sizes[best] += u.guests.length;
+    }
+
+    renderHall(tables);
+    renderTablesList(tables);
+    $("hall").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function renderHall(tables) {
+    var hall = $("hall");
+    if (!hall) return;
+    var html = '<div class="stage">✦ СЦЕНА / ТАНЦПОЛ ✦</div><div class="hall-grid">';
+    for (var i = 0; i < 5; i++) {
+      var t = tables[i];
+      var names = [];
+      for (var j = 0; j < t.length; j++) names.push(esc(t[j].name));
+      html += '<div class="rtable">' +
+        '<div class="num">' + (i + 1) + "</div>" +
+        '<div class="seats">' + t.length + " чел.</div>" +
+        '<div class="list">' + (names.join(", ") || "пусто") + "</div>" +
+        "</div>";
+    }
+    html += '<div class="couple-wrap"><div class="couple">' +
+      '<div class="lbl">Стол №6</div>' +
+      '<div class="names">💕 Невеста & Жених</div>' +
+      "</div></div></div>";
+    hall.innerHTML = html;
+  }
+
+  function renderTablesList(tables) {
+    var box = $("tablesResult");
+    if (!box) return;
+    var html = "";
+    for (var i = 0; i < 5; i++) {
+      var t = tables[i];
+      var chips = "";
+      for (var j = 0; j < t.length; j++) {
+        var g = t[j];
+        chips += '<span class="chip">' + esc(g.name) +
+          '<span class="r">' + esc(g.role) + " · " + sideNames[g.side] + "</span></span>";
+      }
+      html += '<div class="tbox"><h3>Стол №' + (i + 1) +
+        ' <span class="cnt">' + t.length + " чел.</span></h3>" + chips + "</div>";
+    }
+    html += '<div class="tbox couple-box"><h3>💕 Стол №6 — для вас с женихом <span class="cnt">2 чел.</span></h3>' +
+      '<span class="chip">Невеста<span class="r">Молодожёны</span></span>' +
+      '<span class="chip">Жених<span class="r">Молодожёны</span></span></div>';
+    box.innerHTML = html;
+  }
+
+  function calc() {
+    var box = $("alcoholResult");
+    if (!box) return;
+    if (guests.length === 0) {
+      box.innerHTML = '<div class="empty" style="padding:30px"><span class="big">🍷</span>Сначала добавьте гостей</div>';
+      return;
+    }
+
+    var counts = { all: 0, unknown: 0, vodka: 0, wine: 0, champagne: 0, none: 0 };
+    var softCounts = { all: 0, unknown: 0, water: 0, juice: 0, soda: 0, tea: 0, mors: 0, lemonade: 0, compote: 0 };
+
+    for (var i = 0; i < guests.length; i++) {
+      counts[guests[i].drink] = (counts[guests[i].drink] || 0) + 1;
+      softCounts[guests[i].soft] = (softCounts[guests[i].soft] || 0) + 1;
+    }
+
+    var vodkaL = (counts.vodka * 0.25 + counts.all * 0.15).toFixed(1);
+    var wineL = (counts.wine * 0.35 + counts.all * 0.20).toFixed(1);
+    var champL = (counts.champagne * 0.20 + counts.all * 0.10).toFixed(1);
+
+    var waterL = (guests.length * 0.5).toFixed(1);
+    var juiceL = (guests.length * 0.3).toFixed(1);
+    var sodaL = (guests.length * 0.2).toFixed(1);
+
+    var alcHtml = "";
+    if (counts.vodka + counts.all > 0)
+      alcHtml += '<span class="badge">🥃 <b>Крепкое</b> · ~' + vodkaL + " л</span>";
+    if (counts.wine + counts.all > 0)
+      alcHtml += '<span class="badge">🍷 <b>Вино</b> · ~' + wineL + " л</span>";
+    if (counts.champagne + counts.all > 0)
+      alcHtml += '<span class="badge">🥂 <b>Шампанское</b> · ~' + champL + " л</span>";
+    if (counts.unknown > 0)
+      alcHtml += '<span class="badge">🤷 <b>Не знаю</b> · ' + counts.unknown + " чел.</span>";
+
+    var softHtml = "";
+    if (softCounts.water + softCounts.all > 0) softHtml += '<span class="badge soft">💧 <b>Вода</b> · ~' + waterL + " л</span>";
+    if (softCounts.juice + softCounts.all > 0) softHtml += '<span class="badge soft">🧃 <b>Сок</b> · ~' + juiceL + " л</span>";
+    if (softCounts.soda + softCounts.all > 0) softHtml += '<span class="badge soft">🥤 <b>Газировка</b> · ~' + sodaL + " л</span>";
+    if (softCounts.tea > 0) softHtml += '<span class="badge soft">☕ <b>Чай/кофе</b> · ' + softCounts.tea + " чел.</span>";
+    if (softCounts.mors > 0) softHtml += '<span class="badge soft">🫐 <b>Морс</b> · ' + softCounts.mors + " чел.</span>";
+    if (softCounts.lemonade > 0) softHtml += '<span class="badge soft">🍋 <b>Лимонад</b> · ' + softCounts.lemonade + " чел.</span>";
+    if (softCounts.compote > 0) softHtml += '<span class="badge soft">🍑 <b>Компот</b> · ' + softCounts.compote + " чел.</span>";
+    if (softCounts.unknown > 0) softHtml += '<span class="badge soft">🤷 <b>Не знаю</b> · ' + softCounts.unknown + " чел.</span>";
+
+    box.innerHTML =
+      '<div class="res-sec"><div class="ttl">🍾 Алкоголь</div>' + (alcHtml || '<span class="badge">Пьющих нет</span>') + "</div>" +
+      '<div class="res-sec"><div class="ttl">🥤 Безалкогольные</div>' + (softHtml || '<span class="badge soft">Не указаны</span>') + "</div>" +
+      '<div class="hint">Нормы: крепкое 250 мл, вино 350 мл, шампанское 200 мл на пьющего. Вода 0,5 л, сок 0,3 л, газировка 0,2 л на человека. Гости «Всё» учтены во всех категориях.</div>';
+  }
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    $("btnAdd").addEventListener("click", addGuest);
+    $("btnCreateGroup").addEventListener("click", createGroup);
+    $("btnSeat").addEventListener("click", autoSeat);
+    $("btnCalc").addEventListener("click", calc);
+    $("gName").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") addGuest();
+    });
+    refreshAll();
+  });
+})();
+</script>
+</body>
+</html>
